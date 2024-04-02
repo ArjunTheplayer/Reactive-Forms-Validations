@@ -1,0 +1,222 @@
+<div class="container">
+  <p class="display-2 text-center">
+    <span style="color: red">*</span>Form Validation
+  </p>
+
+  <div class="row">
+    <form
+      [formGroup]="userForm"
+      #ref="ngForm"
+      class="col-12 col-sm-8 col-md-6 mx-auto"
+      (ngSubmit)="onFormsubmit()"
+    >
+      <!-- Associate name -->
+      <div class="mb-3">
+        <label for="un">Associate Name</label>
+        <input
+          type="text"
+          id="un"
+          class="form-control"
+          formControlName="username"
+          placeholder="Associate Name"
+        />
+        <!-- validation error message for useername -->
+        <div
+          class="text-danger"
+          *ngIf="
+            (username.invalid && (username.dirty || username.touched)) ||
+            ref.submitted
+          "
+        >
+          <p *ngIf="username.errors?.['required']">*username is required</p>
+          <p *ngIf="username.errors?.['minlength']">*Min length is 4</p>
+          <p *ngIf="username.errors?.['maxlength']">*Max length is 30</p>
+        </div>
+      </div>
+      <!-- Associate id -->
+      <div class="mb-3">
+        <label for="Associateid">Associate Id</label>
+        <input
+          type="text"
+          id="Associateid"
+          class="form-control"
+          formControlName="Associateid"
+          placeholder="Associate Id"
+        />
+        <div
+          class="text-danger"
+          *ngIf="
+            (check.invalid && (check.dirty || check.touched)) || ref.submitted
+          "
+        >
+          <!-- validation error message -->
+          <p *ngIf="check.errors?.['required']">
+            *Please enter the Associate id
+          </p>
+          <p *ngIf="check.errors?.['pattern']">*Numeric Values only Id</p>
+          <p *ngIf="check.errors?.['minlength']">*Min length is 6</p>
+          <p *ngIf="check.errors?.['maxlength']">*Max length is 6</p>
+        </div>
+      </div>
+      <!-- project id -->
+      <div class="mb-3">
+        <label for="projectid">Project ID</label>
+        <input
+          type="text"
+          id="projectid"
+          class="form-control"
+          formControlName="projectid"
+          placeholder="Project Id"
+          autocomplete="off"
+        />
+
+        <div
+          class="text-danger"
+          *ngIf="
+            (projectid.invalid && (projectid.dirty || projectid.touched)) ||
+            ref.submitted
+          "
+        >
+          <!-- validation error message -->
+          <p *ngIf="projectid.errors?.['required']">
+            *Please enter the Project Id
+          </p>
+          <p *ngIf="projectid.errors?.['pattern']">*No special charaters</p>
+          <p *ngIf="projectid.errors?.['minlength']">*Min length is 12</p>
+          <p *ngIf="projectid.errors?.['maxlength']">*Max length is 12</p>
+        </div>
+      </div>
+      <!-- radio buttons -->
+      <div class="mb-3">
+        <div class="form-ceck">
+          <label for="">onshore</label>
+          <input
+            type="radio"
+            formControlName="shore"
+            name="shore"
+            value="offshore"
+            class="form-check-input"
+            (change)="radioselect($event)"
+            id=""
+          />
+          <label for="">offshore</label>
+          <input
+            type="radio"
+            formControlName="shore"
+            name="shore"
+            value="onshore"
+            class="form-check-input"
+            (change)="radioselect($event)"
+            id="onsh"
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <select
+          name="location"
+          formControlName="location"
+          class="form-select"
+          id=""
+        >
+          <option selected>select a location</option>
+          <option value="{{ city }}" *ngFor="let city of selectlocation">
+            {{ city }}
+          </option>
+        </select>
+      </div>
+      <!-- check boxs -->
+      <div class="mb-3">
+        <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 mx-auto">
+          <div
+            class="form-check"
+            *ngFor="let skill of skillslist; let ind = index"
+          >
+            <input
+              type="checkbox"
+              class="form-check-input checkbox"
+              name="{{ skill.name }}"
+              id="{{ skill.name }}"
+              value="{{ skill.value }}"
+              (change)="oncheckboxchange($event)"
+            />
+            <label for="{{ skill.name }}" class="form-check-label">{{
+              skill.name
+            }}</label>
+          </div>
+        </div>
+        <!-- check box validation -->
+        <div
+          class="text-danger"
+          *ngIf="
+            (checkbox.invalid && checkbox.touched) ||
+            checkbox.dirty ||
+            ref.submitted
+          "
+        >
+          <p *ngIf="checkbox.errors?.['required']">*Skills required</p>
+          <p *ngIf="checkbox.errors?.['minlength']">*Select min 5 skills</p>
+        </div>
+
+        <!-- upload file -->
+        <div class="mb-3">
+          <label for="fF" class="form-label">Upload profile</label>
+          <input
+            class="form-control"
+            formControlName="formFile"
+            type="file"
+            id="fF"
+          />
+          <div
+            class="text-danger"
+            *ngIf="
+              (formFile.invalid && (formFile.dirty || formFile.touched)) ||
+              ref.submitted
+            "
+          >
+            <p *ngIf="formFile.errors?.['required']">*choose file</p>
+          </div>
+        </div>
+        <!-- feedback form -->
+        <!-- feedback -->
+        <div class="mb-3">
+          <label for="fb"></label>
+          <textarea
+            name="feedback"
+            id="fb"
+            rows="5"
+            class="form-control"
+            formControlName="feedback"
+            placeholder="comments"
+          ></textarea>
+          <!-- Validation error message -->
+          <div
+            class="text-danger"
+            *ngIf="
+              (feedback.invalid && (feedback.dirty || feedback.touched)) ||
+              ref.submitted
+            "
+          >
+            <!-- validation error msg for required rule of username -->
+            <p *ngIf="feedback.errors?.['required']">*Please enter comments</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <!-- submit button -->
+
+        <button
+          type="submit"
+          class="btn btn-success"
+          [disabled]="!userForm.valid"
+        >
+          Register
+        </button>
+        <button type="submit" class="btn btn-danger" (click)="resetform()">
+          Reset
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
